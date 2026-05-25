@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><title>Регистрация</title></head>
+<body>
+    <h2>Регистрация в системе</h2>
+    <form method="POST">
+        <label>Название лагеря:</label><br>
+        <input type="text" name="camp_name" placeholder="Например: Орлёнок" required><br><br>
+
+        <label>Ваша роль:</label><br>
+        <select name="role" id="roleSelect" onchange="toggleGroupInput()" required>
+            <option value="camp_admin">Администрация лагеря (требует одобрения)</option>
+            <option value="counselor">Вожатый</option>
+            <option value="kid">Ребенок / Участник</option>
+        </select><br><br>
+
+        <!-- Поле отряда, скрыто по умолчанию для администрации -->
+        <div id="groupDiv" style="display:none; margin-bottom: 20px;">
+            <label>Номер вашего отряда:</label><br>
+            <input type="number" name="group_num" min="1" placeholder="Например: 3">
+        </div>
+
+        <label>Придумайте уникальный логин:</label><br>
+        <input type="text" name="username" required><br><br>
+        
+        <label>Пароль:</label><br>
+        <input type="password" name="password" required><br><br>
+        
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <br><a href="/">На главную</a>
+
+    <script>
+    function toggleGroupInput() {
+        var role = document.getElementById("roleSelect").value;
+        var groupDiv = document.getElementById("groupDiv");
+        if (role === "counselor" || role === "kid") {
+            groupDiv.style.display = "block";
+        } else {
+            groupDiv.style.display = "none";
+        }
+    }
+    </script>
+</body>
+</html>

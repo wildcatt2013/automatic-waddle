@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная — Единая платформа лагерей</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --primary-color: #007bff; /* Менять здесь */
+            --btn-hover: #0056b3;     /* Менять здесь */
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; max-width: 450px; width: 100%; }
+        h1 { color: #333; margin-bottom: 10px; font-size: 24px; }
+        p { color: #666; margin-bottom: 30px; }
+        .btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; box-sizing: border-box; }
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-primary:hover { background-color: var(--btn-hover); }
+        .btn-secondary { background-color: #e2e8f0; color: #333; }
+        .btn-secondary:hover { background-color: #cbd5e1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Единая платформа лагерей</h1>
+        <p>Добро пожаловать! Управляйте сменами и отслеживайте настроение детей в реальном времени.</p>
+        
+        {% if session['username'] %}
+            <p>Вы вошли как: <strong>{{ session['username'] }}</strong></p>
+            <a href="/dashboard" class="btn btn-primary">В личный кабинет</a>
+            <a href="/logout" class="btn btn-secondary">Выйти из системы</a>
+        {% else %}
+            <a href="/login" class="btn btn-primary">Войти в профиль</a>
+            <a href="/register" class="btn btn-secondary">Регистрация</a>
+        {% endif %}
+    </div>
+</body>
+</html>

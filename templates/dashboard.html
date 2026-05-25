@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <style>
+        /* ======================================================== */
+        /* 🎨 НАСТРОЙКА ЦВЕТОВ ТЕСТА (Поменяйте HEX-коды на свои)   */
+        /* ======================================================== */
+        :root { 
+            --color-red: #FF3B30;     /* Ваш цвет для "Восторженное" */
+			--color-blue: #007AFF;    /* Ваш цвет для "Грустное" */
+			--color-orange: #FF9500;  /* Ваш цвет для "Радостное" */
+			--color-yellow: #FFCC00;  /* Ваш цвет для "Приятное" */
+			--color-green: #34C759;   /* Ваш цвет для "Спокойное" */
+			--color-purple: #AF52DE;  /* Ваш цвет для "Тревожное" */
+			--color-gray: #123123; /* Ваш цвет для "Трудно сказать" */
+			--color-black: #1C1C1E;   /* Ваш цвет для "Очень плохое" */
+			--color-swampy: #1C1C1E;   /* Ваш цвет для "Плохое" */
+			--color-white: #1C1C1E;   /* Ваш цвет для "Другое" */
+            
+
+            /* Основные фоны сайта */
+            --bg-color: #f4f7f6; 
+            --primary-color: #007bff; 
+            --btn-hover: #0056b3; 
+        }
+        /* ======================================================== */
+
+        /* Общие стили страницы */
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-color); margin: 0; padding: 20px; }
+        .box { background: white; padding: 30px; border-radius: 12px; max-width: 750px; margin: 30px auto; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
+        h2 { color: #333; margin-top: 0; }
+        .badge { background: #e2e8f0; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; color: #4a5568; display: inline-block; }
+        hr { border: 0; border-top: 1px solid #edf2f7; margin: 20px 0; }
+        
+        /* Сетка плиток для детей */
+        .lutoshkin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 15px; margin: 15px 0 25px 0; }
+        .lutoshkin-grid input[type="radio"] { display: none; }
+        
+        .color-square {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            aspect-ratio: 1 / 1; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: bold;
+            color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.6); border: 3px solid transparent;
+            transition: all 0.2s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+        .color-square:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .lutoshkin-grid input[type="radio"]:checked + .color-square { border-color: #222; transform: scale(1.05); box-shadow: 0 0 15px rgba(0,0,0,0.25); }
+
+        /* Привязка настроенных цветов к квадратикам */
+        .sq-red { background-color: var(--color-red); }
+        .sq-orange { background-color: var(--color-orange); }
+        .sq-yellow { background-color: var(--color-yellow); color: #000; text-shadow: none; }
+        .sq-green { background-color: var(--color-green); }
+        .sq-blue { background-color: var(--color-blue); }
+        .sq-purple { background-color: var(--color-purple); }
+        .sq-black { background-color: var(--color-black); }
+
+        /* Маленькие цветные индикаторы для таблицы вожатого */
+        .dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+        .dot-red { background-color: var(--color-red); }
+        .dot-orange { background-color: var(--color-orange); }
+        .dot-yellow { background-color: var(--color-yellow); border: 1px solid #ccc; }
+        .dot-green { background-color: var(--color-green); }
+        .dot-blue { background-color: var(--color-blue); }
+        .dot-purple { background-color: var(--color-purple); }
+        .dot-black { background-color: var(--color-black); }
+
+        textarea { width: 100%; height: 80px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; box-sizing: border-box; margin-top: 8px; font-family: inherit; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+        th { background-color: #f8fafc; font-weight: 600; color: #4a5568; }
+        
+        .btn-submit { background: #28a745; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-logout { display: inline-block; background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; }
+        .alert-success { background-color: #def7ec; color: #03543f; padding: 18px; border-radius: 8px; border-left: 5px solid #28a745; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>Лагерь «{{ camp_name }}»</h2>
+        <div>
+            Пользователь: <strong>{{ username }}</strong> 
+            <span class="badge">
+                {% if role == 'camp_admin' %}Создатель / Директор лагеря
+                {% elif role == 'counselor' %}Вожатый (Отряд №{{ group_num }})
+                {% elif role == 'kid' %}Ребенок (Отряд №{{ group_num }})
+                {% endif %}
+            </span>
+        </div>
+        <hr>
+
+        <!-- ================= РАЗДЕЛ РЕБЕНКА ================= -->
+        {% if role == 'kid' %}
+            {% if already_voted %}
+                <div class="alert-success">
+                    ✨ <strong>Отлично!</strong> Настроение на сегодня записано. Твой вожатый уже видит результат в своей панели!
+                </div>
+            {% else %}
+                <h3>🎨 Тест Лутошкина: Какое у тебя настроение?</h3>
+                <p style="color: #666; font-size: 14px;">Кликни по квадрату, который лучше всего отражает твой сегодняшний день:</p>
+                
+                <form action="/submit_lutoshkin" method="POST">
+                    <div class="lutoshkin-grid">
+                        <label>
+                            <input type="radio" name="color" value="red" required>
+                            <span class="color-square sq-red">Восторг</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="color" value="orange">
+                            <span class="color-square sq-orange">Радость</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="color" value="yellow">
+                            <span class="color-square sq-yellow">Светлое</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="color" value="green">
+                            <span class="color-square sq-green">Покой</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="color" value="blue">
+                            <span class="color-square sq-blue">Грусть</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="color" value="purple">
+                            <span class="color-square sq-purple">Тревога</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="color" value="black">
+                            <span class="color-square sq-black">Уныние</span>
+                        </label>
+                    </div>
+
+                    <label style="font-weight: 600; color: #444;">Комментарий для вожатого:</label>
+                    <textarea name="comment" placeholder="Расскажи коротко, как прошел твой день..."></textarea>
+                    <br><br>
+                    <button type="submit" class="btn-submit">Отправить вожатому</button>
+                </form>
+            {% endif %}
+        {% endif %}
+
+        <!-- ================= РАЗДЕЛ ВОЖАТОГО И ДИРЕКТОРА ================= -->
+        {% if role == 'camp_admin' or role == 'counselor' %}
+            <h3>📊 Мониторинг цветописи Лутошкина</h3>
+            <p style="color: #666; font-size: 14px;">
+                {% if role == 'counselor' %} Вы видите отчеты детей только вашего <strong>отряда №{{ group_num }}</strong>.
+                {% else %} Вы Создатель лагеря и видите ответы <strong>всех отрядов</strong> вашей организации.
+                {% endif %}
+            </p>
+            
+            {% if votes %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Отряд</th>
+                            <th>Ребенок</th>
+                            <th>Настроение</th>
+                            <th>Комментарий ребенка</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vote in votes %}
+                        <tr>
+                            <td>{{ vote[3] }}</td>
+                            <td>Отряд {{ vote[4] }}</td>
+                            <td><strong>{{ vote[0] }}</strong></td>
+                            <td>
+                                {% if vote[1] == 'red' %}<span class="dot dot-red"></span>Восторг
+                                {% elif vote[1] == 'orange' %}<span class="dot dot-orange"></span>Радость
+                                {% elif vote[1] == 'yellow' %}<span class="dot dot-yellow"></span>Светлое
+                                {% elif vote[1] == 'green' %}<span class="dot dot-green"></span>Спокойное
+                                {% elif vote[1] == 'blue' %}<span class="dot dot-blue"></span>Грусть
+                                {% elif vote[1] == 'purple' %}<span class="dot dot-purple"></span>Тревога
+                                {% elif vote[1] == 'black' %}<span class="dot dot-black"></span>Уныние
+                                {% endif %}
+                            </td>
+                            <td style="color: #4a5568; font-style: italic;">{{ vote[2] or '---' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p style="color: #999; font-style: italic; margin-top: 20px;">Ответов от детей пока нет.</p>
+            {% endif %}
+        {% endif %}
+
+        <br><br>
+        <a href="/logout" class="btn-logout">Выйти из аккаунта</a>
+    </div>
+
+</body>
+</html>

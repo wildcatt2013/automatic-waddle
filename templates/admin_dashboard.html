@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель Создателя Сайта</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fff5f5; padding: 20px; }
+        .box { background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 40px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 4px solid #dc3545; }
+        h2 { color: #dc3545; margin-top: 0; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 12px; font-size: 15px; }
+        .btn-approve { background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; text-decoration: none; font-weight: bold; margin-left: 10px; display: inline-block; }
+        .btn-approve:hover { background: #218838; }
+        .btn-logout { display: inline-block; background: #6c757d; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>Панель Создателя Сайта (Главный Admin)</h2>
+        <p>Вы управляете доступом лагерных администраций к платформе.</p>
+        <hr>
+        <h3>Заявки на модерации:</h3>
+        
+        {% if pending_camps %}
+            <ul>
+            {% for camp in pending_camps %}
+                <li>
+                    Лагерь: <strong>{{ camp[1] }}</strong> (Логин: {{ camp[2] }})
+                    <a href="/approve/{{ camp[0] }}" class="btn-approve">Одобрить лагерь</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p style="color: #666; font-style: italic;">Новых заявок на подключение нет.</p>
+        {% endif %}
+        
+        <a href="/logout" class="btn-logout">Выйти</a>
+    </div>
+
+</body>
+</html>
